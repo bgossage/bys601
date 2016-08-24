@@ -11,6 +11,9 @@
 import sys
 import math
 
+#
+# Define a function to prompt for an input string with a default value.
+# 
 def input_string( prompt, default ) :
    try:
       
@@ -26,26 +29,28 @@ def input_string( prompt, default ) :
    except EOFError:
       return str(default)
 
-
+#
+# Define a function to prompt for an input float with a default value.
+# 
 def input_float( prompt, default ) :
    
     return float( input_string( prompt, str(default) ) )
 
 
 #
-# Ka is the dissociation constant
+# NOTE: Ka is the dissociation constant
 # 
 # pKa = -log( Ka )
 #
 
 
 #
-# Define the list of available stock buffers...
+# Define the list of available stock buffer solutions...
 #          name                  pKa     molarity
 stock = { "Tris" :             ("8.072", "0.1"), 
           "Succinic acid" :    ("4.207", "1.0"),
           "CABS" :             ("10.7",  "0.1"),
-          "KH2PO4" :           ("7.2",   "0.25")
+          "KH2PO4" :           ("7.2",   "0.1")
         }
 
 try:
@@ -61,6 +66,7 @@ try:
    else:
    # Find the buffer pKa...
       pKa = float( stock[buffer][0] )
+      
    
    print
    print "Selected Solution: ", buffer
@@ -70,9 +76,12 @@ try:
 # Get desired pH from the user...
    pH = input_float("Enter the desired pH: ", default=7.4 )
 
-   if( abs(pH-pKa) > 1.0 ): raise Exception( "pH is not within +-1.0 of the pKa" );
+   if( abs(pH-pKa) > 1.0 ): raise Exception( "pH is not within +-1.0 of the pKa" )
 
    print "Desired pH: ", pH
+   
+# Get the molarity of the conjugate base...
+   base = input_float( "Enter the concentration of the base (mM): ", default=0.25 )
    
 #
 # NOTE: Assume that the Henderson-Hasselbach equation applies.
@@ -120,10 +129,12 @@ try:
    print "Moles of A = ", Moles_A, " moles"
    print "Moles of HA = ", Moles_HA, " moles"
    
-# Calculate the volume of each stock...
-  Liters_A = Moles_A / 
+# Calculate the volume of each stock solution...
+   Liters_A = Moles_A / base
+   Liters_HA = Moles_HA / float(stock[buffer][1])
    
-   
+   print "Liters A: ", Liters_A * 1e6, "uL"
+   print "Liters_HA: ", Liters_HA * 1e6, "uL"
    
 
 except Exception as err:
