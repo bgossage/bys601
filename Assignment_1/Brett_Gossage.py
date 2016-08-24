@@ -81,7 +81,8 @@ try:
    print "Desired pH: ", pH
    
 # Get the molarity of the conjugate base...
-   base = input_float( "Enter the concentration of the base (mM): ", default=0.25 )
+   conjugate_name = input_string( "Enter the conjugate base name: ", default="K2HPO4" )
+   base_molarity = input_float( "Enter the molar concentration of the conjugate base (M): ", default=0.25 )
    
 #
 # NOTE: Assume that the Henderson-Hasselbach equation applies.
@@ -119,22 +120,24 @@ try:
    M_A = molarity * A_fraction;
    M_HA = molarity * HA_fraction;
   
-   print "Molarity of A = ", M_A, " M"
-   print "Molarity of HA = ", M_HA, " M"
+   print "Molarity of conjugate base = ", M_A, " M"
+   print "Molarity of weak acid = ", M_HA, " M"
 
 # Calculate the moles of each component...
    Moles_A = M_A * volume
    Moles_HA = M_HA * volume
    
-   print "Moles of A = ", Moles_A, " moles"
-   print "Moles of HA = ", Moles_HA, " moles"
+   print "Moles of conjugate base = ", Moles_A, " moles"
+   print "Moles of weak acid = ", Moles_HA, " moles"
    
 # Calculate the volume of each stock solution...
-   Liters_A = Moles_A / base
-   Liters_HA = Moles_HA / float(stock[buffer][1])
+
+   stock_molarity = float(stock[buffer][1])
+   Liters_A = Moles_A / base_molarity
+   Liters_HA = Moles_HA / stock_molarity
    
-   print "Liters A: ", Liters_A * 1e6, "uL"
-   print "Liters_HA: ", Liters_HA * 1e6, "uL"
+   print "Volume ", conjugate_name, ": ", "%.1f" % (Liters_A * 1e6), "uL"
+   print "Volume ", buffer, ": ", "%.1f" % (Liters_HA * 1e6), "uL"
    
 
 except Exception as err:
