@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 #
-# BYS 601
+# BYS 601, Fall 2016
 #
 # Brett Gossage (bgossgen@gmail.com)
 #
@@ -13,6 +13,8 @@ import math
 
 #
 # Define a function to prompt for an input string with a default value.
+#
+# NOTE: Using defaults from a known problem allows a quick run-thru test.
 # 
 def input_string( prompt, default ) :
    try:
@@ -26,8 +28,11 @@ def input_string( prompt, default ) :
      
      return ans;
       
+# NOTE: raw_input() can raise an exception, so handle it here.
    except EOFError:
       return str(default)
+   
+# end function input_string ~~~~~~~~~~~~~~~~~~~~~
 
 #
 # Define a function to prompt for an input float with a default value.
@@ -35,6 +40,8 @@ def input_string( prompt, default ) :
 def input_float( prompt, default ) :
    
     return float( input_string( prompt, str(default) ) )
+
+# end function input_float() ~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 #
@@ -45,13 +52,15 @@ def input_float( prompt, default ) :
 
 
 #
-# Define the list of available stock buffer solutions...
+# Define a dictionary of available stock buffer solutions...
 #          name                  pKa     molarity
 stock = { "Tris" :             ("8.072", "0.1"), 
           "Succinic acid" :    ("4.207", "1.0"),
           "CABS" :             ("10.7",  "0.1"),
           "KH2PO4" :           ("7.2",   "0.1")
         }
+
+# start main program
 
 try:
    print "Available buffers: ", stock
@@ -87,8 +96,8 @@ try:
 #
 # NOTE: Assume that the Henderson-Hasselbach equation applies.
 #           =>      pH = pKa + log10( [A] / [HA] )
-#                   A .=. concentration of the conjugate base
-#                   HA .=. concentration of the weak acid
+#                   A .=.  the conjugate base
+#                   HA .=. the weak acid
 #
    
 # => [A] / [HA] = 10.0 ** ( pH - pKa)
@@ -109,12 +118,7 @@ try:
 
 # Calculate the fraction of each buffer component...
    A_fraction = ratio / ( 1.0 + ratio );
-   
-   print "A = ",  A_fraction
-   
    HA_fraction = 1.0 / (1.0 + ratio);
-   
-   print "HA = ", HA_fraction
 
 # Find the molarity of each component...
    M_A = molarity * A_fraction;
@@ -146,6 +150,8 @@ except Exception as err:
 except:
    print "Unknown error "
    sys.exit( -1  )
+
+# end main program ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #
 # EOF
