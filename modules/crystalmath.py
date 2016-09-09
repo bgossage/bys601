@@ -123,7 +123,7 @@ class UnitCell:
 #
 # Return the cartesian coordinate transform matrix.
 #
-   def transform():
+   def transform( self ):
 
       cosBeta = math.cos( self.beta )
       cosAlpha = math.cos( self.alpha )
@@ -138,7 +138,7 @@ class UnitCell:
 
       c3 = self.c * math.sqrt( 1.0 - cosBeta*cosBeta - temp*temp )
 
-      transform = numpy.array( [ [a, b*cosGamma, c1], [0.0, b*sinGamma, c2], [0.0, 0.0, c3] ])
+      transform = numpy.array( [ [self.a, self.b*cosGamma, c1], [0.0, self.b*sinGamma, c2], [0.0, 0.0, c3] ])
 
       return transform
 
