@@ -15,14 +15,14 @@ from crystalmath import *
 # Create a unit cell...
 unitCell = UnitCell( "AA" )
 
-# Unit cell parameters for Anhydrous Alum from Chapter 1
-unitCell.a = 4.709
-unitCell.b = 4.709
-unitCell.c = 7.984
+# Unit cell paramters for CuSO4 5H2O              
+unitCell.a = 6.091
+unitCell.b = 10.63
+unitCell.c = 5.064
 
-unitCell.alpha = 90.0 * deg2rad
-unitCell.beta = 90.0 * deg2rad
-unitCell.gamma = 120.0 * deg2rad
+unitCell.alpha = 82.410 * deg2rad
+unitCell.beta = 107.50 * deg2rad
+unitCell.gamma = 102.70 * deg2rad
 
 # Define the fractional coordinates...
 X_S = numpy.array( [0.333, 0.337, 0.222], ndmin=2 )  # Note: ndmin allows transpose to work
@@ -33,4 +33,5 @@ bond_length = unitCell.bond_length( X_S, X_O )
 
 print "Interatomic bond length: ", bond_length, " Angstroms"
 
-# Interatomic bond length:  1.71548966055  Angstroms
+# Interatomic bond length:  3.5606127765  Angstroms
+

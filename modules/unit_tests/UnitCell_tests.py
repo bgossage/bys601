@@ -38,16 +38,19 @@ class UnitCell_tests( unittest.TestCase ):
 
       print "The unit cell G Matrix: \n", G
 
-      self.assertAlmostEqual( G[0,0], 24.11, delta=0.01 )
-      self.assertAlmostEqual( G[0,1], -12.05, delta=0.01 )
+      tol = 0.01
+
+      self.assertAlmostEqual( G[0,0], 24.11, delta=tol )
+      self.assertAlmostEqual( G[0,1], -12.05, delta=tol )
 
       self.assertAlmostEqual( G[0,2], 0.0, places=7 )
       self.assertAlmostEqual( G[1,2], 0.0, places=7 )
       self.assertAlmostEqual( G[2,0], 0.0, places=7 )
       self.assertAlmostEqual( G[2,1], 0.0, places=7 )
 
-      self.assertAlmostEqual( G[1,1], 24.11, delta=0.01 )
-      self.assertAlmostEqual( G[1,0], -12.05, delta=0.01 )
+      self.assertAlmostEqual( G[1,1], 24.11, delta=tol )
+      self.assertAlmostEqual( G[1,0], -12.05, delta=tol )
+      self.assertAlmostEqual( G[2,2], 29.26, delta=tol )
 
    #end test_gmatrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -64,6 +67,9 @@ class UnitCell_tests( unittest.TestCase ):
 
    #end test_volume ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+   """ 
+      Test the computation of the bond length and angle from unit cell parameters.
+   """
    def test_bond_properties( self ):
 
       Xsi_1 = numpy.array( [0.4699, 0.0, 0.0], ndmin=2 )
@@ -89,6 +95,49 @@ class UnitCell_tests( unittest.TestCase ):
       self.assertAlmostEqual( A, 143.46, delta=1.0 )
 
    #end test_bond_properties ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   
+   """ 
+      Test the computation of the cartesian transform matrix from unit cell parameters.
+   """
+   def test_transform( self ):
+      
+      
+      
+   # HMB Unit Cell Parameters
+      hmb_unit_cell = crystalmath.UnitCell()
+      
+      hmb_unit_cell.a = 9.010;
+      hmb_unit_cell.b = 8.926;
+      hmb_unit_cell.c = 5.344;
+
+
+      hmb_unit_cell.alpha = 44.0 + 27.0/60.0;
+      hmb_unit_cell.beta = 116.0 + 43.0/60.0;
+      hmb_unit_cell.gamma = 119.0 + 34.0/60.0;
+      
+      hmb_unit_cell.alpha *= crystalmath.deg2rad;
+      hmb_unit_cell.beta *= crystalmath.deg2rad;
+      hmb_unit_cell.gamma *= crystalmath.deg2rad;
+
+      P = hmb_unit_cell.transform()
+      
+      print "The HMB cartesian transform matrix: \n", P
+      
+      tol = 0.01
+      
+      self.assertAlmostEqual( P[0,0], 9.01, delta=tol )
+      self.assertAlmostEqual( P[0,1], -4.4044, delta=tol )
+      self.assertAlmostEqual( P[0,2], -2.4025, delta=tol )
+      
+      self.assertAlmostEqual( P[1,0], 0.0, delta=tol )
+      self.assertAlmostEqual( P[1,1], 7.7637, delta=tol )
+      self.assertAlmostEqual( P[1,2], 3.0230, delta=tol )
+
+      self.assertAlmostEqual( P[2,0], 0.0, delta=tol )
+      self.assertAlmostEqual( P[2,1], 0.0, delta=tol )
+      self.assertAlmostEqual( P[2,2], 3.6942, delta=tol )
+   
+   # end test_transform ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # end class UnitCell_tests
 
