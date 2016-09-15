@@ -19,14 +19,33 @@ import math
 import numpy
 import crystalmath
 
+
+def conversion( x, y, z ):
+   
+   X = numpy.array( [ [x], [y], [z] ] )
+#
+# SCALEX matrix for oxidoreductase (RCSB: 5DBQ) (insect thioredoxin)
+#
+   M = numpy.array([ [0.009284, 0.000000, 0.007337],
+                     [0.000000, 0.034507,  0.000000],
+                     [0.000000, 0.000000,  0.015960] 
+                   ])
+   
+   NewX = numpy.matmul(M,X)
+   
+   return NewX
+
+# end method conversion
+
+
 #
 # Open the input file and cleanly handle exceptions.
 #
 with open( "5dbq.pdb", "r" ) as pdb_file:
 
-   #
-   # Open the output file and cleanly handle exception.
-   #
+#
+# Open the output file and cleanly handle exception.
+#
    with open( "5dbq_transformed.pdb", "w" ) as output_file:
 
       for line in pdb_file:
@@ -35,28 +54,32 @@ with open( "5dbq.pdb", "r" ) as pdb_file:
 
           # Get the characters up to the beginning of the data to be transformed...
             prefix = line[0:30]
+              
+            print "str = ", prefix[0]
 
           # Read the variables...
-            x = float( line[31:39] )
-            y = float( line[39:47] )
-            z = float( line[47:54] )
+            x = float( line[30:38] )
+            y = float( line[38:46] )
+            z = float( line[46:54] )
+
+          # Apply the scale matrix...
+
+            A =  conversion( x, y, z )
+
+            x = A[0,0]
+            y = A[1,0]
+            z = A[2,0]
 
           # Get the characters after the end of the data to be transformed..
             postfix = line[54:80]
 
-            print "prefix: ", "'", prefix, "'"
-            print "postfix: ", "'", postfix, "'"
-            print "x =", x
-            print "y =", y
-            print "z =", z
-            
          # Duplicate the prefix data in the output...
             output_file.write( prefix )
 
          # Write the coordinates...
-            output_file.write( str.format( "{:>8.3f}", x)  )
-            output_file.write( str.format( "{:>8.3f}", y) )
-            output_file.write( str.format( "{:>8.3f}", z) )
+            output_file.write( str.format( "{:8.3f}", x)  )
+            output_file.write( str.format( "{:8.3f}", y) )
+            output_file.write( str.format( "{:8.3f}", z) )
 
          # Duplicate the postfix data in the output...
             output_file.write( postfix )
@@ -64,6 +87,7 @@ with open( "5dbq.pdb", "r" ) as pdb_file:
 
          #end if
          else:
+         # Otherwise, duplicate all other lines in the output...
             output_file.write( line )
 
          #end else
@@ -95,5 +119,6 @@ COLUMNS        DATA  TYPE    FIELD        DEFINITION
 77 - 78        LString(2)    element      Element symbol, right-justified.
 79 - 80        LString(2)    charge       Charge  on the atom.
 
+ref:  http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM
 
 """
