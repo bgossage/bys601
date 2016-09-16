@@ -19,8 +19,29 @@ import math
 import numpy
 import crystalmath
 
+atomic_wts = { "C" :  12.0,
+               "N" :  14.0,
+               "O" :  16.0,
+               "S" :  32.0
+             }
 
-def conversion( x, y, z ):
+
+# Unit cell paramters for oxidoreductase RCSB 5DBQ
+# Crystal structure of insect thioredoxin at 1.95 angstroms
+unitCell = crystalmath.UnitCell()
+
+unitCell.a = 107.710
+unitCell.b = 28.980
+unitCell.c = 79.860
+
+unitCell.alpha = 90.00 * crystalmath.deg2rad
+unitCell.beta = 128.32 * crystalmath.deg2rad
+unitCell.gamma = 90.00 * crystalmath.deg2rad
+
+#
+# Convert crystallographic coordinates to fractional.
+#
+def to_fractional( x, y, z ):
    
    X = numpy.array( [ [x], [y], [z] ] )
 #
@@ -35,8 +56,28 @@ def conversion( x, y, z ):
    
    return NewX
 
-# end method conversion
+# end method to_fractional ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+#
+# Convert fractional coordinates to cartesian
+def to_cartesian( x, y, z ):
+
+   X = numpy.array( [ [x], [y], [z] ] )
+
+   M = unitCell.transform()
+
+   NewX = numpy.matmul(M,X)
+
+   return NewX
+
+# end method to_cartesian ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+xavg = -49.1559084967
+yavg = -34.3433611111
+zavg = 78.4634820261
+N = 0
+MW = 0.0
 
 #
 # Open the input file and cleanly handle exceptions.
@@ -44,7 +85,7 @@ def conversion( x, y, z ):
 with open( "5dbq.pdb", "r" ) as pdb_file:
 
 #
-# Open the output file and cleanly handle exception.
+# Open the output file and cleanly handle exceptions.
 #
    with open( "5dbq_transformed.pdb", "w" ) as output_file:
 
@@ -52,25 +93,50 @@ with open( "5dbq.pdb", "r" ) as pdb_file:
 
          if line.startswith( ("ATOM","HETATM") ):
 
-          # Get the characters up to the beginning of the data to be transformed...
-            prefix = line[0:30]
-              
-            print "str = ", prefix[0]
+            element = line[77:78]
 
-          # Read the variables...
+            atomic_wt = atomic_wts[element]
+
+            MW += atomic_wt
+
+         # Get the characters up to the beginning of the data to be transformed...
+            prefix = line[0:30]
+
+         # Read the variables...
             x = float( line[30:38] )
             y = float( line[38:46] )
             z = float( line[46:54] )
 
-          # Apply the scale matrix...
+         # Shift the centroid to the origin...
+            x -= xavg
+            y -= yavg
+            z -= zavg
 
-            A =  conversion( x, y, z )
+ #           xavg += x
+ #           yavg += y
+ #           zavg += z
+ #           N += 1
 
-            x = A[0,0]
-            y = A[1,0]
-            z = A[2,0]
+         # Convert to fractional coordinates...
+            A =  to_fractional( x, y, z )
 
-          # Get the characters after the end of the data to be transformed..
+            xf = A[0,0]
+            yf = A[1,0]
+            zf = A[2,0]
+
+         # Convert to cartesian coordinates...
+            A =  to_cartesian( xf, yf, zf )
+
+            xc = A[0,0]
+            yc = A[1,0]
+            zc = A[2,0]
+
+         # Shift to the center of the  unit cell...
+            x += unitCell.a * 0.5
+            y += unitCell.b * 0.5
+            z += unitCell.c * 0.5
+
+         # Get the characters after the end of the data to be transformed..
             postfix = line[54:80]
 
          # Duplicate the prefix data in the output...
@@ -97,6 +163,32 @@ with open( "5dbq.pdb", "r" ) as pdb_file:
    # end with outputfile
 
 # end with pdb_file
+
+print "Molecular Weight: ", MW
+
+volume = 195573.43  # cubic angstroms
+
+# Matthew's number from the PDB File: 2.02
+Vm = 2.02
+
+Mass = volume / Vm
+
+num_molecules = Mass / MW;
+
+print "num_molecules = ", num_molecules
+
+print "Vm = ", Vm
+
+# Molecular Weight:  24972.0
+# Vm =  7.83170871376
+
+# NOTE: uncomment to get the centroid
+
+#xavg /= float(N)
+#yavg /= float(N)
+#zavg /= float(N)
+
+#print "centroid: ", xavg, yavg, zavg
 
 """
 ATOM Record Format
