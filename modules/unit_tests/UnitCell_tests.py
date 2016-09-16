@@ -1,5 +1,14 @@
 #!/usr/bin/python
 
+"""
+UnitCell class unit tests.
+
+Each UnitCell method is tested against expected results from the given inputs.
+
+(Uses the unit test module from the python libraries (similar to JUnit.)
+
+"""
+
 import sys
 
 sys.path.append( ".." )
@@ -68,7 +77,7 @@ class UnitCell_tests( unittest.TestCase ):
    #end test_volume ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    """ 
-      Test the computation of the bond length and angle from unit cell parameters.
+      Test the computation of the bond length and angle from Foundations of Crystallography
    """
    def test_bond_properties( self ):
 
