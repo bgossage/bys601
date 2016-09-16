@@ -20,7 +20,7 @@ deg2rad = numpy.pi / 180.0
 
 unitCell = crystalmath.UnitCell()
 
-# Unit cell paramters for oxidoreductase RCSB 5DBQ              
+# Unit cell parameters for oxidoreductase RCSB 5DBQ
 # Crystal structure of insect thioredoxin at 1.95 angstroms
 unitCell.a = 107.710
 unitCell.b = 28.980
