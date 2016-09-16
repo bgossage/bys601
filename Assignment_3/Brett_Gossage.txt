@@ -1,0 +1,57 @@
+#
+# BYS 601, Fall 2016
+#
+# Brett Gossage (bgossgen@gmail.com)
+#
+# Assignment 3, Sept 16, 2016
+#
+
+(1) 
+The Unit Cell parameters for oxidoreductase (RCSB 5DBQ)
+(insect thioredoxin)
+See (2)
+
+Since a != b != c, alpha = gamma = 90 deg, and Beta != 90 deg;
+
+the crystal lattice system for oxidoreductase is monoclinic.
+
+
+(2)
+
+The Unit Cell parameters for oxidoreductase:
+
+a = 107.710
+b = 28.980 
+c = 79.860  
+alpha = 90.00 
+beta = 128.32 
+gamma = 90.00 
+
+(3)
+
+The volume of the oxidoreductase unit cell is equal to 195573.43 cubic angstroms
+
+  See:  unit_cell_volume.py
+
+(4)
+
+From the PDB file:  Matthews Coefficient, Vm (Angstroms**3/DA): 2.02
+
+Molecular Weight esimtated from PDB:  24972.0
+Vm = 2.02
+Mass = volume / Vm
+
+num_molecules = Mass / MW = 3.8  per assymmetric unit;
+
+NOTE: Not clear to me how this is supposed to work.  I understand the definition of Vm, but
+      not the means to get at the data.
+
+(5), (6)
+
+See Python script:  transform_pdb.py
+
+(7)
+
+See Image: 5DBQ_unit_cell.png
+
+
