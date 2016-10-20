@@ -122,6 +122,7 @@ def identity_of( group ):
 #
 def print_table( group ):
 
+#  print the table column labels...
    print
    print "X | ",
    for g in group:
@@ -129,6 +130,7 @@ def print_table( group ):
 
    print "\n------------------------------------------------------"
 
+# Print the table row/col elements...
    for g in group:
       print "{:2s}| ".format( name_of( g ) ),
       for h in group:
