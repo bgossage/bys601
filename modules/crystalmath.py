@@ -62,6 +62,41 @@ class UnitCell:
    # end method gmatrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #
+# Calculate the reciprocal G matrix.
+#
+   def gstar_matrix( self ):
+
+      G = self.gmatrix()
+
+      Gstar = numpy.linalg.inv( G )
+
+      return Gstar
+
+   # end method gmatrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   
+#
+# Calculate the d-spacing given the plane.
+#
+   def d_spacing( self, h, k, l ):
+
+      Gstar = self.gstar_matrix()
+
+      H = numpy.array( [h, k, l] )
+
+      Hgs = numpy.dot( H, Gstar )
+
+      Hsq_vec = numpy.dot( Hgs, numpy.transpose(H) )
+      
+      Hsq = numpy.linalg.norm( Hsq_vec )
+      
+      d = 1.0 / math.sqrt( Hsq )
+
+      return d
+
+   # end method gmatrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#
 # Calculate the volume of this unit cell (Angstroms**3)
 #
    def volume( self ):
