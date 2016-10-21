@@ -10,6 +10,12 @@
 
 # Problem 2.7
 
+import sys
+#
+# Setup path to crystalmath module...
+#
+sys.path.append( "../modules" )
+
 from crystalmath import *
 
 

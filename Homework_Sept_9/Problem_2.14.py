@@ -10,6 +10,13 @@
 
 # Problem 2.14
 
+import sys
+
+#
+# Setup path to crystalmath module...
+#
+sys.path.append( "../modules" )
+
 from crystalmath import *
 
 # Create a unit cell...
@@ -45,9 +52,9 @@ print "V2: ", V2, "\n"
 
 Pinvt = numpy.transpose(Pinv)
 
-PinvtG2 = numpy.matmul( Pinvt, G2 )
+PinvtG2 = numpy.dot( Pinvt, G2 )
 
-G1 = numpy.matmul( PinvtG2, P)
+G1 = numpy.dot( PinvtG2, P)
 
 print "G1: ", G1, "\n"
 

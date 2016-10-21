@@ -110,7 +110,7 @@ class UnitCell:
 
       X12_G = numpy.dot( X12, self.gmatrix() )
 
-      X12_G_X13t = numpy.matmul( X12_G, numpy.transpose(X13) );
+      X12_G_X13t = numpy.dot( X12_G, numpy.transpose(X13) );
 
       cos_theta = X12_G_X13t / (r12 * r13);
 

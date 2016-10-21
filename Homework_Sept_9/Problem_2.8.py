@@ -10,8 +10,14 @@
 
 # Problem 2.8
 
-from crystalmath import *
+import sys
 
+#
+# Setup path to crystalmath module...
+#
+sys.path.append( "../modules" )
+
+from crystalmath import *
 
 unitCell = UnitCell()
 

@@ -10,6 +10,13 @@
 
 # Problem 2.12
 
+import sys
+
+#
+# Setup path to crystalmath module...
+#
+sys.path.append( "../modules" )
+
 from crystalmath import *
 
 # Create a unit cell...
