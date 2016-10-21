@@ -25,6 +25,7 @@ class UnitCell_tests( unittest.TestCase ):
 # from Foundations of Crystallography, Example 2.4 
 # 
    SiO2UnitCell = crystalmath.UnitCell()
+   HMB_UnitCell = crystalmath.UnitCell()
 
    def setUp(self):
 
@@ -35,6 +36,14 @@ class UnitCell_tests( unittest.TestCase ):
       UnitCell_tests.SiO2UnitCell.alpha = 90.0 * crystalmath.deg2rad
       UnitCell_tests.SiO2UnitCell.beta = 90.0 * crystalmath.deg2rad
       UnitCell_tests.SiO2UnitCell.gamma = 120.0 * crystalmath.deg2rad
+      
+      UnitCell_tests.HMB_UnitCell.a = 9.01
+      UnitCell_tests.HMB_UnitCell.b = 8.926
+      UnitCell_tests.HMB_UnitCell.c = 5.344
+
+      UnitCell_tests.HMB_UnitCell.alpha = (44+27.0/60.0) * crystalmath.deg2rad
+      UnitCell_tests.HMB_UnitCell.beta = (116+43.0/60.0) * crystalmath.deg2rad
+      UnitCell_tests.HMB_UnitCell.gamma = (119+34.0/60) * crystalmath.deg2rad
 
    # end method setUp ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -64,6 +73,32 @@ class UnitCell_tests( unittest.TestCase ):
    #end test_gmatrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    """ 
+      Test the computation of the reciprocal space G-star matrix from unit cell parameters
+   """
+   def test_gstar_matrix( self ):
+
+      Gstar = UnitCell_tests.HMB_UnitCell.gstar_matrix()
+
+      print "The unit cell Gstar Matrix: \n", Gstar
+
+      tol = 0.01
+
+      self.assertAlmostEqual( Gstar[0,0], 0.0167, delta=tol )
+      self.assertAlmostEqual( Gstar[0,1], 0.0059, delta=tol )
+      self.assertAlmostEqual( Gstar[0,2], 0.0056, delta=tol )
+      
+      self.assertAlmostEqual( Gstar[1,0], 0.0059, delta=tol )
+      self.assertAlmostEqual( Gstar[1,1], 0.0277, delta=tol )
+      self.assertAlmostEqual( Gstar[1,2], -0.0285, delta=tol )
+
+      self.assertAlmostEqual( Gstar[2,0], 0.0056, delta=tol )
+      self.assertAlmostEqual( Gstar[2,1], -0.0285, delta=tol )
+      self.assertAlmostEqual( Gstar[2,2], 0.0733, delta=tol )
+
+   #end test_gstar_matrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+   """ 
       Test the computation of the volume from unit cell parameters
    """
    def test_volume( self ):
@@ -75,6 +110,36 @@ class UnitCell_tests( unittest.TestCase ):
       self.assertAlmostEqual( V, 113.01, delta=0.1 )
 
    #end test_volume ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+   """ 
+      Test the computation of the d-spacing from unit cell parameters and a plane
+   """
+   def test_dspacing( self ):
+
+      unitCell = crystalmath.UnitCell()
+      
+      unitCell.a = 5.0
+      unitCell.b = 6.0
+      unitCell.c = 1.0
+      
+      unitCell.alpha = 90.0 * crystalmath.deg2rad
+      unitCell.beta = 90.0 * crystalmath.deg2rad
+      unitCell.gamma = 115.0 * crystalmath.deg2rad
+
+      
+      h = 2
+      k = 1
+      l = 0
+      
+      d = unitCell.d_spacing( h, k, l )
+
+      print "The unit cell d-spacing = ", d
+
+      self.assertAlmostEqual( d, 1.83, delta=0.01 )
+
+   #end test_dspacing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
    """ 
       Test the computation of the bond length and angle from Foundations of Crystallography
