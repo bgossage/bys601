@@ -72,7 +72,7 @@ class UnitCell:
 
       return Gstar
 
-   # end method gmatrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   # end method gstar_matrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~
    
 #
 # Calculate the d-spacing given the plane.
@@ -89,7 +89,9 @@ class UnitCell:
       
       Hsq = numpy.linalg.norm( Hsq_vec )
       
-      d = 1.0 / math.sqrt( Hsq )
+   #   d = 1.0 / math.sqrt( Hsq )
+      
+      d = 1.0 / Hsq
 
       return d
 
