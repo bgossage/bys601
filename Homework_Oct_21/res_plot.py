@@ -20,11 +20,20 @@ import numpy
 import matplotlib.pyplot
 import crystalmath
 
+filename = "4H2L_C222.sca"
+
+
+if( len(sys.argv) > 1 ):
+   filename = sys.argv[1] 
+   
+#end if
+
+print "filename: ", filename
 
 #
 # Open the input file and cleanly handle exceptions.
 #
-with open( "4H2L_C222.sca", "r" ) as sca_file:
+with open( filename, "r" ) as sca_file:
 
    lines = sca_file.readlines()
    
@@ -41,18 +50,20 @@ with open( "4H2L_C222.sca", "r" ) as sca_file:
    unitCell.beta = float( cell_params[4] )
    unitCell.gamma = float( cell_params[5] )
    
-   N = len(lines) - 3;
+   value_pairs = list()
    
-   x_values = numpy.zeros(N)
-   y_values = numpy.zeros(N)
+   Inorm = 0.0
+   d = 0.0
    
-   count = 0
+   Ndatums = len(lines)-3
+   
+   print "Datums = ", Ndatums
 
    for i in range( 3, len(lines) ):
       
    # Read h  k  l  I  sigma...
 
-  #    print lines[i]
+   #    print lines[i]
       
       tokens = lines[i].split();
       
@@ -65,30 +76,41 @@ with open( "4H2L_C222.sca", "r" ) as sca_file:
       I = float( tokens[3] )
       sigma = float( tokens[4] )
 
-   
-   # Compute resolution: d = 1 / H.hkl...
+   # Compute resolution: d = 1 / H.hkl
       d = unitCell.d_spacing( h, k, l )
-      
-      x_values[count] = d
-   
+
    # Compute I/sigma...
       Inorm = I / sigma
       
-      y_values[count] = Inorm
-      
-      print d, " ", Inorm
-   
-   # Store in array for plotting...
 
-      count += 1
+      if Inorm > 3.0 :
+         value_pairs.append( [d,Inorm] )
 
    #end for
+
+   N = len(value_pairs);
    
+   print "N = ", N
+   
+   percent = 100.0 * float(N)/float(Ndatums)
+   
+
+   
+   print "Percent above threshold: ", percent
+   
+   x_values = numpy.zeros(N)
+   y_values = numpy.zeros(N)
+   
+   for i in range(0,N):
+       x_values[i] = value_pairs[i][0]
+       y_values[i] = value_pairs[i][1]
+       
+   print "Resolution range: [ ", min(x_values), " , ", max(x_values), " ] "
+	   
    index_array = numpy.argsort( x_values )
 
    px_values = x_values[index_array]
    py_values = y_values[index_array]
-
    
    matplotlib.pyplot.plot( px_values, py_values )
    matplotlib.pyplot.show()
