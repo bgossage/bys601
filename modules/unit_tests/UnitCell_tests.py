@@ -17,7 +17,7 @@ sys.path.append( ".." )
 import unittest
 import crystalmath
 import numpy
-
+import math
 
 class UnitCell_tests( unittest.TestCase ):
 
@@ -135,8 +135,61 @@ class UnitCell_tests( unittest.TestCase ):
       d = unitCell.d_spacing( h, k, l )
 
       print "The unit cell d-spacing = ", d
+      
+      expected_d = 1.83
 
-      self.assertAlmostEqual( d, 1.83, delta=0.01 )
+      self.assertAlmostEqual( d, expected_d, delta=0.01 )
+      
+   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      
+      unitCell.gamma = 90.0 * crystalmath.deg2rad
+
+      Gs = unitCell.gstar_matrix();
+
+      asqr = 1.0 / (unitCell.a*unitCell.a)
+      self.assertAlmostEqual( Gs[0,0], asqr, delta=0.0001 )
+      
+      bsqr = 1.0 / (unitCell.b*unitCell.b)
+      self.assertAlmostEqual( Gs[1,1], bsqr, delta=0.0001 )
+
+      csqr = 1.0 / (unitCell.c*unitCell.c)
+      self.assertAlmostEqual( Gs[2,2], csqr, delta=0.0001 )
+      
+      expected_dsq = 1.0 / (h*h*asqr + k*k*bsqr + l*l*csqr)
+
+      d = unitCell.d_spacing( h, k, l )
+      
+      print "d= ", d
+      
+      expected_d = math.sqrt( expected_dsq )
+      
+      print "Expected d = ", expected_d
+      
+      self.assertAlmostEqual( d, expected_d, delta=0.0001 )
+      
+   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      unitCell.a = 2.0
+      unitCell.b = 3.0
+      unitCell.c = 5.0
+      
+      unitCell.alpha = 80.0 * crystalmath.deg2rad
+      unitCell.beta = 100.0 * crystalmath.deg2rad
+      unitCell.gamma = 110.0 * crystalmath.deg2rad
+
+      
+      h = 1
+      k = 2
+      l = 3
+      
+      d_star_sq_123 = 1.39498933203
+      
+      expected_d_star = math.sqrt( d_star_sq_123 )
+      
+      d = unitCell.d_spacing( h, k, l )
+      
+      d_star = 1.0 / d
+      
+      self.assertAlmostEqual( d_star, expected_d_star, delta=0.01 )
 
    #end test_dspacing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
