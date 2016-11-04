@@ -79,19 +79,16 @@ class UnitCell:
 #
    def d_spacing( self, h, k, l ):
 
+   # Compute the reciprocal space metric matrix...
       Gstar = self.gstar_matrix()
 
       H = numpy.array( [h, k, l] )
 
       Hgs = numpy.dot( H, Gstar )
 
-      Hsq_vec = numpy.dot( Hgs, numpy.transpose(H) )
-      
-      Hsq = numpy.linalg.norm( Hsq_vec )
-      
-   #   d = 1.0 / math.sqrt( Hsq )
-      
-      d = 1.0 / Hsq
+      Hsq = numpy.dot( Hgs, numpy.transpose(H) )
+
+      d = 1.0 / math.sqrt(Hsq)
 
       return d
 
